@@ -1,0 +1,23 @@
+---
+title: "Sichuan, 2025"
+date: 2026-03-18
+cover:
+  image: "https://pub-47840c45ad0f4ab8abc03743a6746346.r2.dev/4F0AAB5E-E81C-4655-A0AE-359FC2B53E14_1_102_a.jpeg"
+  hidden: true
+images:
+  - src: "https://pub-47840c45ad0f4ab8abc03743a6746346.r2.dev/4F0AAB5E-E81C-4655-A0AE-359FC2B53E14_1_102_a.jpeg"
+  - src: "https://pub-47840c45ad0f4ab8abc03743a6746346.r2.dev/972B177F-4118-442F-A846-CB22C6A879C6_1_102_a.jpeg"
+  - src: "https://pub-47840c45ad0f4ab8abc03743a6746346.r2.dev/24014DB0-62DF-4281-9445-1FEF4540B384_1_102_a.jpeg"
+  - src: "https://pub-47840c45ad0f4ab8abc03743a6746346.r2.dev/2C161564-8441-4EA6-B016-E395A2C7CB64_1_102_a.jpeg"
+  - src: "https://pub-47840c45ad0f4ab8abc03743a6746346.r2.dev/42C8B8B8-3838-4136-8B71-4C8F7F773B55_1_105_c.jpeg"
+  - src: "https://pub-47840c45ad0f4ab8abc03743a6746346.r2.dev/4DE734D7-1CFA-4C94-837A-8D0CF1A2E5A1_1_102_o.jpeg"
+  - src: "https://pub-47840c45ad0f4ab8abc03743a6746346.r2.dev/92E10E13-8587-481F-9450-5F2B8B6559BF_1_102_a.jpeg"
+  - src: "https://pub-47840c45ad0f4ab8abc03743a6746346.r2.dev/EAE65C0D-784E-4659-A899-3F4DF84322D6_1_105_c.jpeg"
+  - src: "https://pub-47840c45ad0f4ab8abc03743a6746346.r2.dev/52A6A9E2-24D2-47A4-896E-D48C72AC4894_1_105_c.jpeg"
+  - src: "https://pub-47840c45ad0f4ab8abc03743a6746346.r2.dev/A73B7402-3408-4EA7-A541-6C4604E11521_1_105_c.jpeg"
+  - src: "https://pub-47840c45ad0f4ab8abc03743a6746346.r2.dev/AB764DF7-A5C3-4493-9987-813C9CABB063_1_105_c.jpeg"
+  - src: "https://pub-47840c45ad0f4ab8abc03743a6746346.r2.dev/CFB5F7AB-2D93-40E4-8E99-84F5A21D5917_1_105_c.jpeg"
+  - src: "https://pub-47840c45ad0f4ab8abc03743a6746346.r2.dev/D452B2B7-6E42-429F-B071-21C4506CE425_1_105_c.jpeg"
+  - src: "https://pub-47840c45ad0f4ab8abc03743a6746346.r2.dev/E2FC769A-0ECB-49FB-944F-185B043D9C00_1_105_c.jpeg"
+  - src: "https://pub-47840c45ad0f4ab8abc03743a6746346.r2.dev/49EF1D6C-7E32-4096-9E07-32362B9A239E_1_105_c.jpeg"
+---
