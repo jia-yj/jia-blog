@@ -1,4 +1,4 @@
-baseURL = "https://example.com/"
+baseURL = "https://jia-blog.vercel.app/"
 title = "鲸鱼的记忆"
 languageCode = "zh-cn"
 theme = "PaperMod"
