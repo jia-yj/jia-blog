@@ -55,7 +55,6 @@ function selectPhoto(index) {
   document.querySelectorAll('.photo-thumb').forEach((el, i) => {
     el.classList.toggle('active', i === index);
   });
-  // 让缩略图滚动到可见区域
   const thumb = document.querySelectorAll('.photo-thumb')[index];
   thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
 }
