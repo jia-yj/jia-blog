@@ -1,0 +1,86 @@
+baseURL = "https://example.com/"
+title = "鲸鱼的记忆"
+languageCode = "zh-cn"
+theme = "PaperMod"
+defaultContentLanguage = "zh"
+hasCJKLanguage = true
+paginate = 12
+
+enableRobotsTXT = true
+buildDrafts = false
+buildFuture = false
+buildExpired = false
+
+[minify]
+  disableXML = true
+  minifyOutput = true
+
+[params]
+  env = "production"
+  title = "鲸鱼的记忆"
+  description = "胡思乱想"
+  author = "Jia"
+  defaultTheme = "auto"
+  disableThemeToggle = false
+  ShowReadingTime = false
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = false
+  ShowCodeCopyButtons = true
+  ShowRssButtonInSectionTermList = false
+  ShowFullTextinRSS = false
+  disableSpecial1stPost = true
+  disableScrollToTop = false
+  comments = false
+  hidemeta = false
+  hideSummary = false
+  showtoc = false
+  tocopen = false
+
+  [params.homeInfoParams]
+    Title = "你好"
+    Content = "关于此时此刻"
+
+  [params.profileMode]
+    enabled = false
+
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/"
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+  series = "series"
+
+[menu]
+  [[menu.main]]
+    identifier = "photos"
+    name = "摄影"
+    url = "/photos/"
+    weight = 10
+  [[menu.main]]
+    identifier = "posts"
+    name = "文章"
+    url = "/posts/"
+    weight = 20
+  [[menu.main]]
+    identifier = "about"
+    name = "关于"
+    url = "/about/"
+    weight = 30
+  [[menu.main]]
+    identifier = "search"
+    name = "搜索"
+    url = "/search/"
+    weight = 40
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    noClasses = false
