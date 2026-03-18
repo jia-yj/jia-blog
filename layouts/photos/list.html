@@ -1,11 +1,13 @@
 {{- define "main" }}
-<div class="photo-list">
-  {{- range .Pages }}
-  <a class="photo-item" href="{{ .Permalink }}">
+<div class="photo-grid">
+  {{- range .Pages.ByDate.Reverse }}
+  <a class="photo-grid-item" href="{{ .Permalink }}">
     {{- with .Params.cover.image }}
     <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy">
     {{- end }}
-    <div class="photo-item-title">{{ .Title }}</div>
+    <div class="photo-grid-overlay">
+      <span class="photo-grid-title">{{ .Title }}</span>
+    </div>
   </a>
   {{- end }}
 </div>

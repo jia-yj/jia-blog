@@ -1,24 +1,68 @@
 {{- define "main" }}
-<div class="photo-essay">
-  <div class="photo-essay-header">
-    <h1 class="photo-essay-title">{{ .Title }}</h1>
-    {{- with .Params.date }}
-    <span class="photo-essay-date">{{ . | time.Format "2006" }}</span>
-    {{- end }}
+{{- $images := .Params.images }}
+<div class="photo-viewer">
+
+  {{/* 顶部标题 */}}
+  <div class="photo-viewer-header">
+    <a class="photo-viewer-back" href="{{ "/photos/" | relURL }}">&larr; 摄影</a>
+    <h1 class="photo-viewer-title">{{ .Title }}</h1>
     {{- with .Params.description }}
-    <p class="photo-essay-desc">{{ . }}</p>
+    <p class="photo-viewer-desc">{{ . }}</p>
     {{- end }}
   </div>
-  <div class="photo-essay-content">
-    {{- .Content }}
+
+  {{/* 大图展示区 */}}
+  <div class="photo-viewer-main">
+    <img id="main-photo"
+         src="{{ (index $images 0).src }}"
+         alt="{{ .Title }}"
+         onclick="openLightbox(this.src)">
+    <button class="photo-nav-btn photo-nav-prev" onclick="changePhoto(-1)">&#8592;</button>
+    <button class="photo-nav-btn photo-nav-next" onclick="changePhoto(1)">&#8594;</button>
+    <div class="photo-counter">
+      <span id="photo-current">1</span> / {{ len $images }}
+    </div>
   </div>
-  <div class="photo-essay-nav">
-    {{- with .PrevInSection }}
-    <a href="{{ .Permalink }}">&larr; {{ .Title }}</a>
-    {{- end }}
-    {{- with .NextInSection }}
-    <a href="{{ .Permalink }}" style="margin-left:auto">{{ .Title }} &rarr;</a>
+
+  {{/* 缩略图条 */}}
+  <div class="photo-thumbs" id="photo-thumbs">
+    {{- range $i, $img := $images }}
+    <div class="photo-thumb {{ if eq $i 0 }}active{{ end }}"
+         onclick="selectPhoto({{ $i }})"
+         data-index="{{ $i }}">
+      <img src="{{ $img.src }}" alt="" loading="lazy">
+    </div>
     {{- end }}
   </div>
+
 </div>
+
+<script>
+const photos = [
+  {{ range $images }}{ src: "{{ .src }}" },{{ end }}
+];
+let current = 0;
+
+function selectPhoto(index) {
+  current = index;
+  document.getElementById('main-photo').src = photos[index].src;
+  document.getElementById('photo-current').textContent = index + 1;
+  document.querySelectorAll('.photo-thumb').forEach((el, i) => {
+    el.classList.toggle('active', i === index);
+  });
+  // 让缩略图滚动到可见区域
+  const thumb = document.querySelectorAll('.photo-thumb')[index];
+  thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+}
+
+function changePhoto(dir) {
+  const next = (current + dir + photos.length) % photos.length;
+  selectPhoto(next);
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowLeft') changePhoto(-1);
+  if (e.key === 'ArrowRight') changePhoto(1);
+});
+</script>
 {{- end }}
