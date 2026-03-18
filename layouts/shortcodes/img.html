@@ -1,0 +1,9 @@
+<figure class="photo-figure">
+  <img src="{{ .Get "src" }}" 
+       alt="{{ .Get "alt" | default "" }}" 
+       loading="lazy"
+       onclick="openLightbox(this.src)">
+  {{- with .Get "caption" }}
+  <figcaption>{{ . }}</figcaption>
+  {{- end }}
+</figure>
