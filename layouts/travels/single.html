@@ -64,11 +64,11 @@ fetch('https://unpkg.com/world-atlas@2/countries-110m.json')
       style: f => {
         const id = parseInt(f.id);
         if (id === 156) return defaultStyle; // 跳过中国，用省级数据
-        // 法国（250）包含海外领地，只对欧洲本土着色
+        // 法国（250）包含海外领地，只对欧洲本土着色（法属圭亚那经度约 -53°）
         if (id === 250) {
           const bounds = L.geoJSON(f).getBounds();
           const center = bounds.getCenter();
-          if (center.lat < 30) return defaultStyle;
+          if (center.lng < -30) return defaultStyle;
         }
         return visitedCountries.has(id) ? visitedStyle : defaultStyle;
       },

@@ -56,27 +56,27 @@ buildExpired = false
 [menu]
   [[menu.main]]
     identifier = "travels"
-    name = "足迹"
+    name = "Travels"
     url = "/travels/"
     weight = 5
   [[menu.main]]
     identifier = "photos"
-    name = "摄影"
+    name = "Photos"
     url = "/photos/"
     weight = 10
   [[menu.main]]
     identifier = "posts"
-    name = "文章"
+    name = "Writing"
     url = "/posts/"
     weight = 20
   [[menu.main]]
     identifier = "about"
-    name = "关于"
+    name = "About"
     url = "/about/"
     weight = 30
   [[menu.main]]
     identifier = "search"
-    name = "搜索"
+    name = "Search"
     url = "/search/"
     weight = 40
 

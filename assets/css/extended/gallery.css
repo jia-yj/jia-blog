@@ -2,10 +2,10 @@
 .photo-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 3px;
-  max-width: 1400px;
-  margin: 40px auto;
-  padding: 0 24px;
+  gap: 32px;
+  max-width: 1200px;
+  margin: 48px auto;
+  padding: 0 32px;
 }
 
 @media (max-width: 600px) {
@@ -16,7 +16,7 @@
   display: block;
   position: relative;
   overflow: hidden;
-  aspect-ratio: 3/2;
+  aspect-ratio: 4/3;
   background: #111;
   text-decoration: none;
 }

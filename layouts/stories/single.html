@@ -1,0 +1,33 @@
+{{- define "main" }}
+<div class="story-page">
+
+  <div class="story-header">
+    <h1 class="story-title">{{ .Title }}</h1>
+    {{- with .Params.meta }}
+    <p class="story-meta">{{ . }}</p>
+    {{- end }}
+  </div>
+
+  <div class="story-body">
+    {{- range .Params.blocks }}
+
+    {{- if eq .type "pair" }}
+    <div class="story-block story-pair space-{{ default "sm" .spaceAfter }}">
+      {{- range .images }}
+      <div class="story-pair-item {{ default "" .size }}">
+        <img src="{{ .src }}" alt="">
+      </div>
+      {{- end }}
+    </div>
+
+    {{- else }}
+    <div class="story-block story-single {{ .layout }} space-{{ default "sm" .spaceAfter }}">
+      <img src="{{ .src }}" alt="">
+    </div>
+    {{- end }}
+
+    {{- end }}
+  </div>
+
+</div>
+{{- end }}
