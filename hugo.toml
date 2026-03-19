@@ -55,6 +55,11 @@ buildExpired = false
 
 [menu]
   [[menu.main]]
+    identifier = "travels"
+    name = "足迹"
+    url = "/travels/"
+    weight = 5
+  [[menu.main]]
     identifier = "photos"
     name = "摄影"
     url = "/photos/"

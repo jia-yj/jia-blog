@@ -1,0 +1,170 @@
+{{- define "main" }}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+  #travel-map {
+    width: 100%;
+    height: 75vh;
+    margin: 32px 0 0;
+    border-radius: 4px;
+  }
+  .leaflet-popup-content-wrapper {
+    border-radius: 4px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    font-size: 13px;
+  }
+  .leaflet-popup-content { margin: 8px 14px; }
+</style>
+
+<div style="max-width:1200px;margin:0 auto;padding:32px 24px 60px;">
+  <h1 style="font-size:20px;font-weight:400;letter-spacing:0.04em;margin:0;">足迹</h1>
+  <div id="travel-map"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/topojson-client@3/dist/topojson-client.min.js"></script>
+<script>
+// 去过的中国省份（匹配 GeoJSON name 字段）
+const visitedProvinces = new Set([
+  '四川省', '北京市', '上海市', '江苏省', '广东省', '香港特别行政区',
+  '云南省', '新疆维吾尔自治区', '福建省', '山东省', '河北省', '天津市',
+  '甘肃省', '陕西省', '重庆市'
+]);
+
+// 去过的国家（ISO 3166-1 数字代码）
+// 新加坡=702, 马来西亚=458, 越南=704
+// 法国=250, 意大利=380, 瑞士=756, 泰国=764, 日本=392, 韩国=410
+const visitedCountries = new Set([702, 458, 704, 250, 380, 756, 764, 392, 410]);
+
+const map = L.map('travel-map', { zoomControl: true }).setView([18, 108], 4);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+  maxZoom: 19
+}).addTo(map);
+
+const visitedStyle = {
+  fillColor: '#c8956c',
+  fillOpacity: 0.35,
+  color: '#b07d55',
+  weight: 0.8,
+};
+const defaultStyle = {
+  fillColor: 'transparent',
+  fillOpacity: 0,
+  color: 'transparent',
+  weight: 0,
+};
+
+// 加载世界国家（排除中国，用省级数据替代）
+fetch('https://unpkg.com/world-atlas@2/countries-110m.json')
+  .then(r => r.json())
+  .then(world => {
+    const countries = topojson.feature(world, world.objects.countries);
+    L.geoJSON(countries, {
+      style: f => {
+        const id = parseInt(f.id);
+        if (id === 156) return defaultStyle; // 跳过中国，用省级数据
+        // 法国（250）包含海外领地，只对欧洲本土着色
+        if (id === 250) {
+          const bounds = L.geoJSON(f).getBounds();
+          const center = bounds.getCenter();
+          if (center.lat < 30) return defaultStyle;
+        }
+        return visitedCountries.has(id) ? visitedStyle : defaultStyle;
+      },
+      onEachFeature: (f, layer) => {
+        const id = parseInt(f.id);
+        if (visitedCountries.has(id)) {
+          const names = { 702: '新加坡', 458: '马来西亚', 704: '越南' };
+          layer.bindPopup(names[id] || '');
+        }
+      }
+    }).addTo(map);
+  });
+
+// 城市标记
+const places = [
+  // 中国
+  { name: "成都（四川）",  lat: 30.5728, lng: 104.0668 },
+  { name: "峨眉山",       lat: 29.5997, lng: 103.4841 },
+  { name: "康定",         lat: 30.0490, lng: 101.9624 },
+  { name: "北京",         lat: 39.9042, lng: 116.4074 },
+  { name: "天津",         lat: 39.3434, lng: 117.3616 },
+  { name: "上海",         lat: 31.2304, lng: 121.4737 },
+  { name: "南京",         lat: 32.0603, lng: 118.7969 },
+  { name: "深圳",         lat: 22.5431, lng: 114.0579 },
+  { name: "广州",         lat: 23.1291, lng: 113.2644 },
+  { name: "香港",         lat: 22.3193, lng: 114.1694 },
+  { name: "厦门",         lat: 24.4798, lng: 118.0894 },
+  { name: "大理",         lat: 25.6065, lng: 100.2679 },
+  { name: "乌鲁木齐",     lat: 43.8256, lng: 87.6168  },
+  { name: "威海",         lat: 37.5128, lng: 122.1208 },
+  { name: "济南",         lat: 36.6512, lng: 117.1201 },
+  { name: "秦皇岛",       lat: 39.9354, lng: 119.5996 },
+  { name: "兰州",         lat: 36.0611, lng: 103.8343 },
+  { name: "天水",         lat: 34.5809, lng: 105.7240 },
+  { name: "西安",         lat: 34.3416, lng: 108.9398 },
+  { name: "重庆",         lat: 29.5630, lng: 106.5516 },
+  // 东南亚
+  { name: "新加坡",       lat: 1.3521,  lng: 103.8198 },
+  { name: "槟城",         lat: 5.4141,  lng: 100.3288 },
+  { name: "兰卡威",       lat: 6.3500,  lng: 99.8000  },
+  { name: "胡志明市",     lat: 10.8231, lng: 106.6297 },
+  { name: "岘港",         lat: 16.0471, lng: 108.2068 },
+  { name: "曼谷",         lat: 13.7563, lng: 100.5018 },
+  { name: "清迈",         lat: 18.7061, lng: 98.9817  },
+  { name: "普吉岛",       lat: 7.8804,  lng: 98.3923  },
+  // 东亚
+  { name: "东京",         lat: 35.6762, lng: 139.6503 },
+  { name: "大阪",         lat: 34.6937, lng: 135.5023 },
+  { name: "京都",         lat: 35.0116, lng: 135.7681 },
+  { name: "名古屋",       lat: 35.1815, lng: 136.9066 },
+  { name: "首尔",         lat: 37.5665, lng: 126.9780 },
+  { name: "釜山",         lat: 35.1796, lng: 129.0756 },
+  // 欧洲
+  { name: "巴黎",         lat: 48.8566, lng: 2.3522   },
+  { name: "威尼斯",       lat: 45.4408, lng: 12.3155  },
+  { name: "罗马",         lat: 41.9028, lng: 12.4964  },
+  { name: "比萨",         lat: 43.7228, lng: 10.4017  },
+  { name: "弗洛伦萨",     lat: 43.7696, lng: 11.2558  },
+  { name: "楚格",         lat: 47.1661, lng: 8.5158   },
+  { name: "琉森",         lat: 47.0502, lng: 8.3093   },
+  { name: "日内瓦",       lat: 46.2044, lng: 6.1432   },
+  { name: "伯尔尼",       lat: 46.9481, lng: 7.4474   },
+];
+
+const dotIcon = L.divIcon({
+  className: '',
+  html: '<div style="width:8px;height:8px;background:#c8956c;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>',
+  iconSize: [8, 8],
+  iconAnchor: [4, 4],
+});
+
+places.forEach(p => {
+  L.marker([p.lat, p.lng], { icon: dotIcon })
+    .addTo(map)
+    .bindPopup(p.name);
+});
+
+// 加载中国省级数据
+fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json')
+  .then(r => r.json())
+  .then(data => {
+    L.geoJSON(data, {
+      style: f => {
+        return visitedProvinces.has(f.properties.name) ? visitedStyle : {
+          fillColor: 'transparent',
+          fillOpacity: 0,
+          color: '#ddd',
+          weight: 0.5,
+        };
+      },
+      onEachFeature: (f, layer) => {
+        if (visitedProvinces.has(f.properties.name)) {
+          layer.bindPopup(f.properties.name);
+        }
+      }
+    }).addTo(map);
+  });
+</script>
+{{- end }}
