@@ -49,3 +49,73 @@ body, nav, h1, h2, h3, p, a, button {
 .dark .home-tagline {
   color: #666;
 }
+
+/* ===== 侧边栏 TOC ===== */
+#sidebar-toc {
+  display: none;
+  position: fixed;
+  top: 80px;
+  right: max(24px, calc(50% - 560px));
+  width: 200px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
+@media (min-width: 1280px) {
+  #sidebar-toc {
+    display: block;
+  }
+  #inline-toc {
+    display: none;
+  }
+}
+
+.sidebar-toc-inner {
+  padding: 12px 0;
+}
+
+.sidebar-toc-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #999;
+  margin: 0 0 10px;
+}
+
+#sidebar-toc-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#sidebar-toc-nav li {
+  margin: 4px 0;
+}
+
+#sidebar-toc-nav li ul {
+  padding-left: 12px;
+}
+
+#sidebar-toc-nav a {
+  font-size: 13px;
+  color: #999;
+  text-decoration: none;
+  line-height: 1.5;
+  display: block;
+  transition: color 0.15s;
+}
+
+#sidebar-toc-nav a:hover,
+#sidebar-toc-nav a.active {
+  color: var(--primary);
+}
+
+.dark #sidebar-toc-nav a {
+  color: #666;
+}
+
+.dark #sidebar-toc-nav a:hover,
+.dark #sidebar-toc-nav a.active {
+  color: var(--primary);
+}

@@ -39,7 +39,9 @@
   {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
   {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
   {{- if (.Param "ShowToc") }}
-  {{- partial "toc.html" . }}
+  <div id="inline-toc">
+    {{- partial "toc.html" . }}
+  </div>
   {{- end }}
 
   {{- if .Content }}
@@ -63,5 +65,52 @@
   {{- partial "comments.html" . }}
   {{- end }}
 </article>
+
+{{- if (.Param "ShowToc") }}
+<aside id="sidebar-toc">
+  <div class="sidebar-toc-inner">
+    <p class="sidebar-toc-title">目录</p>
+    <nav id="sidebar-toc-nav"></nav>
+  </div>
+</aside>
+
+<script>
+(function () {
+  const sidebar = document.getElementById('sidebar-toc-nav');
+  const inlineToc = document.querySelector('#inline-toc .inner');
+  if (!sidebar || !inlineToc) return;
+
+  // clone links from inline TOC into sidebar
+  sidebar.innerHTML = inlineToc.innerHTML;
+
+  const WIDE = 1280;
+
+  function onResize() {
+    const wide = window.innerWidth >= WIDE;
+    document.getElementById('inline-toc').style.display = wide ? 'none' : '';
+    document.getElementById('sidebar-toc').style.display = wide ? '' : 'none';
+  }
+  window.addEventListener('resize', onResize);
+  onResize();
+
+  // highlight active heading
+  const allLinks = () => sidebar.querySelectorAll('a');
+  const headings = Array.from(document.querySelectorAll('.post-content h1, .post-content h2, .post-content h3, .post-content h4'));
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        allLinks().forEach(a => a.classList.remove('active'));
+        const id = entry.target.getAttribute('id');
+        const active = sidebar.querySelector(`a[href="#${id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '0px 0px -60% 0px', threshold: 0 });
+
+  headings.forEach(h => observer.observe(h));
+})();
+</script>
+{{- end }}
 
 {{- end }}{{/* end main */}}
