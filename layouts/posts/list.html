@@ -1,0 +1,150 @@
+{{- define "main" }}
+
+{{- if not .IsHome | and .Title }}
+<header class="page-header">
+  {{- partial "breadcrumbs.html" . }}
+  <h1>{{ .Title }}</h1>
+  {{- if .Description }}
+  <div class="post-description">{{ .Description | markdownify }}</div>
+  {{- end }}
+</header>
+{{- end }}
+
+<!-- Heatmap -->
+<div id="heatmap" style="max-width:100%;height:160px;padding:2px;margin-bottom:24px;"></div>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.3.0/dist/echarts.min.js"></script>
+<script>
+(function(){
+  var chartDom = document.getElementById('heatmap');
+  var myChart = echarts.init(chartDom);
+  window.addEventListener('resize', function(){ myChart.resize(); });
+
+  var dataMap = new Map();
+  {{ range (where .Site.RegularPages "Section" "posts") }}
+  (function(){
+    var key = {{ .Date.Format "2006-01-02" }};
+    var wordCount = {{ div .WordCount 1000.0 | lang.FormatNumber 1 }};
+    var link = {{ .RelPermalink }};
+    var title = {{ .Title }};
+    var cur = dataMap.get(key);
+    if (!cur || wordCount > cur.wordCount) {
+      dataMap.set(key, {wordCount: wordCount, link: link, title: title});
+    }
+  })();
+  {{- end }}
+
+  var data = [];
+  dataMap.forEach(function(v, k){ data.push([k, v.wordCount]); });
+
+  function heatmapRange(months) {
+    var end = new Date();
+    var start = new Date();
+    start.setMonth(start.getMonth() - months);
+    return [[
+      echarts.format.formatTime('yyyy-MM-dd', +start),
+      echarts.format.formatTime('yyyy-MM-dd', +end)
+    ]];
+  }
+
+  function getRange() {
+    var w = window.innerWidth;
+    if (w >= 600) return heatmapRange(12);
+    if (w >= 400) return heatmapRange(9);
+    return heatmapRange(6);
+  }
+
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+               || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+                   && !document.documentElement.getAttribute('data-theme'));
+
+  var emptyColor  = isDark ? '#2a2a2a' : '#f1f1f1';
+  var borderColor = isDark ? '#1a1a1a' : '#ffffff';
+
+  myChart.setOption({
+    tooltip: {
+      formatter: function(p) {
+        var post = dataMap.get(p.data[0]);
+        return post ? post.title + ' | ' + post.wordCount + ' 千字' : p.data[0];
+      }
+    },
+    visualMap: {
+      min: 0, max: 10,
+      type: 'piecewise',
+      orient: 'horizontal',
+      left: 'center',
+      top: 0,
+      inRange: { color: ['#7aa8744c', '#7AA874'] },
+      splitNumber: 4,
+      text: ['千字', ''],
+      showLabel: true,
+      itemGap: 20,
+      textStyle: { color: isDark ? '#888' : '#666' }
+    },
+    calendar: {
+      top: 50,
+      left: 20,
+      right: 4,
+      cellSize: ['auto', 12],
+      range: getRange(),
+      itemStyle: { color: emptyColor, borderWidth: 2.5, borderColor: borderColor },
+      yearLabel: { show: false },
+      monthLabel: { color: isDark ? '#888' : '#666' },
+      dayLabel: { color: isDark ? '#888' : '#666' },
+      splitLine: { lineStyle: { color: 'rgba(0,0,0,0)' } }
+    },
+    series: { type: 'heatmap', coordinateSystem: 'calendar', data: data }
+  });
+
+  myChart.on('click', function(params) {
+    if (params.componentType === 'series') {
+      var post = dataMap.get(params.data[0]);
+      if (post) window.open(window.location.origin + post.link, '_blank');
+    }
+  });
+})();
+</script>
+
+{{- if .Content }}
+<div class="post-content">
+  {{- if not (.Param "disableAnchoredHeadings") }}
+  {{- partial "anchored_headings.html" .Content -}}
+  {{- else }}{{ .Content }}{{ end }}
+</div>
+{{- end }}
+
+{{- $pages := .RegularPages }}
+{{- $paginator := .Paginate $pages }}
+
+{{- range $index, $page := $paginator.Pages }}
+<article class="post-entry">
+  {{- $isHidden := (.Param "cover.hiddenInList") | default (.Param "cover.hidden") | default false }}
+  {{- partial "cover.html" (dict "cxt" . "IsSingle" false "isHidden" $isHidden) }}
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">{{- .Title }}</h2>
+  </header>
+  {{- if (ne (.Param "hideSummary") true) }}
+  <div class="entry-content">
+    <p>{{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}</p>
+  </div>
+  {{- end }}
+  {{- if not (.Param "hideMeta") }}
+  <footer class="entry-footer">{{- partial "post_meta.html" . -}}</footer>
+  {{- end }}
+  <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+</article>
+{{- end }}
+
+{{- if gt $paginator.TotalPages 1 }}
+<footer class="page-footer">
+  <nav class="pagination">
+    {{- if $paginator.HasPrev }}
+    <a class="prev" href="{{ $paginator.Prev.URL | absURL }}">«&nbsp;{{ i18n "prev_page" }}</a>
+    {{- end }}
+    {{- if $paginator.HasNext }}
+    <a class="next" href="{{ $paginator.Next.URL | absURL }}">{{ i18n "next_page" }}&nbsp;»</a>
+    {{- end }}
+  </nav>
+</footer>
+{{- end }}
+
+{{- end }}
