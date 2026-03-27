@@ -1,6 +1,64 @@
-/* 全局字体：英文用 Source Sans 3，中文用系统默认 */
-body, nav, h1, h2, h3, p, a, button {
-  font-family: 'Source Sans 3', sans-serif;
+/* 全局字体：中文用 LXGW 文楷，英文 fallback 系统字体 */
+body, nav, p, a, button, li, td, th, blockquote {
+  font-family: 'LXGW WenKai Screen', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  font-size: 17px;
+  line-height: 1.9;
+}
+
+/* 标题字体同族，不额外加粗 */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'LXGW WenKai Screen', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  line-height: 1.4;
+}
+
+/* 标题颜色：只用深浅灰，不用彩色 */
+.post-content h1 { color: #111111; }
+.post-content h2 { color: #333333; }
+.post-content h3 { color: #555555; font-weight: 500; }
+
+.dark .post-content h1 { color: #e8e8e8; }
+.dark .post-content h2 { color: #c8c8c8; }
+.dark .post-content h3 { color: #999999; }
+
+/* ===== 代码块 ===== */
+/* 亮色模式：浅灰底，不用纯黑 */
+.post-content div.highlight,
+.post-content pre {
+  background: #f5f5f5 !important;
+  border-radius: 6px;
+}
+
+.post-content div.highlight pre,
+.post-content pre code {
+  background: transparent !important;
+  color: #333 !important;
+}
+
+/* 保留暗色模式原有深色底 */
+.dark .post-content div.highlight,
+.dark .post-content pre {
+  background: #1e1e1e !important;
+}
+
+.dark .post-content div.highlight pre,
+.dark .post-content pre code {
+  color: #ccc !important;
+}
+
+/* ===== Footer ===== */
+.footer {
+  font-size: 13px;
+  color: #999;
+}
+
+.footer a {
+  font-size: 13px;
+  color: #999;
+}
+
+.dark .footer,
+.dark .footer a {
+  color: #555;
 }
 
 /* 首页名字用 EB Garamond */
@@ -118,4 +176,50 @@ body, nav, h1, h2, h3, p, a, button {
 .dark #sidebar-toc-nav a:hover,
 .dark #sidebar-toc-nav a.active {
   color: var(--primary);
+}
+
+/* ===== Blog 分类 Tab ===== */
+.blog-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.blog-tab {
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 4px 16px;
+  font-size: 13px;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.blog-tab:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.blog-tab.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.dark .blog-tab {
+  border-color: #444;
+  color: #666;
+}
+
+.dark .blog-tab:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.dark .blog-tab.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
 }

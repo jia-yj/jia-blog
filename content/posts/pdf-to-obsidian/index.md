@@ -1,9 +1,10 @@
 ---
 title: "把 PDF 扔进文件夹，自动变成 Markdown"
 date: 2026-03-19
+categories: ["日志"]
 ---
 
-*本文由 AI 生成，作为工具开发记录。*
+*本文由 AI 生成。*
 
 这是一个本地 PDF 自动解析工具，基于 MinerU API。将 PDF 文件放入指定文件夹，脚本自动完成上传、解析、提取，结果以 Markdown 格式存入 Obsidian 笔记库。
 

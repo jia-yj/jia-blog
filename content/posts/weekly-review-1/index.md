@@ -1,10 +1,11 @@
 ---
-title: "周报 | 2026-03-19 ~ 2026-03-25"
+title: "AI 使用周报"
 date: 2026-03-25
 tags: ["ai日志"]
+categories: ["日志"]
 ---
 
-本文由Claude生成，借助'guijios-weekly-review'skill
+*本文由 AI 生成。*
 
 ## 一、本周成果清单
 

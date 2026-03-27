@@ -104,35 +104,54 @@
 })();
 </script>
 
-{{- if .Content }}
-<div class="post-content">
-  {{- if not (.Param "disableAnchoredHeadings") }}
-  {{- partial "anchored_headings.html" .Content -}}
-  {{- else }}{{ .Content }}{{ end }}
+<!-- Tab 切换 -->
+<div class="blog-tabs">
+  <button class="blog-tab active" data-category="all">全部</button>
+  <button class="blog-tab" data-category="随笔">随笔</button>
+  <button class="blog-tab" data-category="日志">日志</button>
 </div>
-{{- end }}
 
-{{- $pages := .RegularPages }}
-{{- $paginator := .Paginate $pages }}
+{{- $paginator := .Paginate .RegularPages }}
+{{- $pages := $paginator.Pages }}
 
-{{- range $index, $page := $paginator.Pages }}
-<article class="post-entry">
-  {{- $isHidden := (.Param "cover.hiddenInList") | default (.Param "cover.hidden") | default false }}
-  {{- partial "cover.html" (dict "cxt" . "IsSingle" false "isHidden" $isHidden) }}
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">{{- .Title }}</h2>
-  </header>
-  {{- if (ne (.Param "hideSummary") true) }}
-  <div class="entry-content">
-    <p>{{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}</p>
-  </div>
-  {{- end }}
-  {{- if not (.Param "hideMeta") }}
-  <footer class="entry-footer">{{- partial "post_meta.html" . -}}</footer>
-  {{- end }}
-  <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
-</article>
+<div class="blog-posts">
+{{- range $pages }}
+  {{- $cats := .Params.categories }}
+  {{- $cat := "日志" }}
+  {{- if $cats }}{{- $cat = index $cats 0 }}{{- end }}
+  <article class="post-entry" data-category="{{ $cat }}">
+    <header class="entry-header">
+      <h2 class="entry-hint-parent">{{- .Title }}</h2>
+    </header>
+    {{- if (ne (.Param "hideSummary") true) }}
+    <div class="entry-content">
+      <p>{{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}</p>
+    </div>
+    {{- end }}
+    {{- if not (.Param "hideMeta") }}
+    <footer class="entry-footer">{{- partial "post_meta.html" . -}}</footer>
+    {{- end }}
+    <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+  </article>
 {{- end }}
+</div>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.blog-tab');
+  var posts = document.querySelectorAll('.blog-posts .post-entry');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){ t.classList.remove('active'); });
+      tab.classList.add('active');
+      var cat = tab.getAttribute('data-category');
+      posts.forEach(function(post){
+        post.style.display = (cat === 'all' || post.getAttribute('data-category') === cat) ? '' : 'none';
+      });
+    });
+  });
+})();
+</script>
 
 {{- if gt $paginator.TotalPages 1 }}
 <footer class="page-footer">
